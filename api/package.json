@@ -1,0 +1,19 @@
+{
+  "name": "mern_day_1",
+  "version": "1.0.0",
+  "description": "MERN Project",
+  "license": "ISC",
+  "author": "Malindu",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
