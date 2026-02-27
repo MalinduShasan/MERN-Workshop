@@ -11,6 +11,13 @@ function App() {
     setStudentsData(students);
   }
 
+  async function deleteStudent(id) {
+    await fetch(`http://localhost:3000/students/${id}`, {
+      method: 'DELETE',
+    });
+    getStudents();
+  }
+
   useEffect(() => {
     getStudents();
   }, [])
@@ -24,6 +31,7 @@ function App() {
             <th>ID</th>
             <th>Name</th>
             <th>Age</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -32,6 +40,9 @@ function App() {
               <td>{student.id}</td>
               <td>{student.name}</td>
               <td>{student.age}</td>
+              <td>
+                <button className="delete-btn" onClick={() => deleteStudent(student.id)}>Delete</button>
+              </td>
             </tr>
           ))}
         </tbody>
