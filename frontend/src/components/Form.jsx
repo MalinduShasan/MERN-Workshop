@@ -1,31 +1,73 @@
-import React from 'react'
+import React, { useState } from 'react'
+import './Form.css'
 
-function Form() {
+function Form({ onStudentAdded }) {
+  const [name, setName] = useState('');
+  const [age, setAge] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+
   async function handleSubmit(e) {
     e.preventDefault();
-    const name = e.target.name.value;
-    const age = e.target.age.value;
 
-    const response = await fetch('http://localhost:3000/students', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, age }),
-    });
+    if (!name.trim() || !age) {
+      setMessage('Please fill in all fields.');
+      return;
+    }
 
-    const data = await response.json();
-    console.log(data);
+    setLoading(true);
+    setMessage('');
+
+    try {
+      const response = await fetch('http://localhost:3000/students', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name.trim(), age: Number(age) }),
+      });
+
+      const data = await response.json();
+      setMessage(`Student "${data.student.name}" added successfully!`);
+      setName('');
+      setAge('');
+      if (onStudentAdded) onStudentAdded();
+    } catch {
+      setMessage('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   }
-  
-    return (
-    <div>
-        <h2>Form</h2>
-        <form onSubmit={handleSubmit}>
-            <input type="text" name="name" placeholder="Name" />
-            <input type="number" name="age" placeholder="Age" />
-            <button type="submit">Submit</button>
-        </form>
+
+  return (
+    <div className="form-container">
+      <h2 className="form-title">Add New Student</h2>
+      <form className="student-form" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="name">Name</label>
+          <input
+            id="name"
+            type="text"
+            placeholder="Enter student name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="age">Age</label>
+          <input
+            id="age"
+            type="number"
+            min="1"
+            max="120"
+            placeholder="Enter age"
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+          />
+        </div>
+        <button className="form-button" type="submit" disabled={loading}>
+          {loading ? 'Adding...' : 'Add Student'}
+        </button>
+        {message && <p className="form-message">{message}</p>}
+      </form>
     </div>
   )
 }
