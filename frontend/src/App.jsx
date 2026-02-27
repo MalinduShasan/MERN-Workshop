@@ -18,21 +18,26 @@ function App() {
   return (
     <div className="app-container">
       <h1 className="title">Students Directory</h1>
-      <div className="students-grid">
-        {studentsData.map((student) => (
-          <div key={student.id} className="student-card">
-            <div className="student-header">
-              <h2 className="student-name">{student.name}</h2>
-            </div>
-            <div className="student-body">
-              <p><span className="label">Age:</span> <span className="value">{student.age}</span></p>
-            </div>
-          </div>
-        ))}
-      </div>
-      <Form />
+      <table className="students-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Age</th>
+          </tr>
+        </thead>
+        <tbody>
+          {studentsData.map((student) => (
+            <tr key={student.id}>
+              <td>{student.id}</td>
+              <td>{student.name}</td>
+              <td>{student.age}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <Form onStudentAdded={getStudents} />
     </div>
-    
   )
 }
 
